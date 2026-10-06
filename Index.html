@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metro Technical Candidature Verification Dossier</title>
+  <style>
+    :root { --primary: #0a2540; --secondary: #19486a; --danger: #b91c1c; --bg: #eef2f6; --card: #ffffff; --text: #1e293b; --border: #cbd5e1; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 12px 8px 70px; user-select: none; -webkit-user-select: none; }
+    .container { max-width: 1000px; margin: 0 auto; background: var(--card); border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; }
+    .sticky-timer { position: sticky; top: 0; z-index: 1000; background: #061826; color: #fff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #f59e0b; }
+    .timer-badge { font-size: 1.5rem; font-weight: 800; color: #fca5a5; background: rgba(220, 38, 38, 0.25); border: 1px solid #ef4444; padding: 4px 16px; border-radius: 6px; letter-spacing: 2px; }
+    .form-header { padding: 20px 24px 10px; border-bottom: 1px solid #e2e8f0; }
+    .warning-bar { background: #fef2f2; border-left: 4px solid var(--danger); padding: 10px 16px; margin: 14px 24px; font-size: 0.8rem; color: #991b1b; }
+    form { padding: 10px 24px 30px; }
+    .section-title { font-size: 0.88rem; font-weight: 700; color: var(--secondary); border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; margin: 20px 0 12px; text-transform: uppercase; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: #334155; margin-bottom: 4px; }
+    input, select, textarea { width: 100%; padding: 8px 10px; font-size: 0.82rem; border: 1px solid var(--border); border-radius: 4px; outline: none; background: #fff; }
+    .err-msg { color: var(--danger); font-size: 0.72rem; margin-top: 3px; display: none; font-weight: 600; }
+    .sample-box { background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 4px; font-size: 0.78rem; font-family: monospace; margin-bottom: 6px; }
+    .checkbox-wrap { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 0.78rem; }
+    .btn-submit { width: 100%; background: var(--primary); color: #fff; border: none; padding: 14px; font-size: 0.95rem; font-weight: 700; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+    .overlay { display: none; text-align: center; padding: 60px 20px; }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+<div class="container">
+  <div class="sticky-timer">
+    <div><div style="font-size:0.75rem; text-transform:uppercase; color:#93c5fd;">Metro Candidate Speed Verification</div><div style="font-size:0.85rem; font-weight:600;">Time Remaining:</div></div>
+    <div class="timer-badge" id="clock">03:00</div>
+  </div>
+  <div id="form-body">
+    <div class="form-header">
+      <h1 style="font-size:1.3rem; color:#0a2540;">Metro Operations & Technical Verification Dossier</h1>
+      <p style="font-size:0.82rem; color:#64748b;">Complete all verification tiers within 180 seconds. Copy/paste is permanently disabled.</p>
+    </div>
+    <div class="warning-bar"><strong>WARNING:</strong> 3-minute strict countdown active. Incomplete entries will be automatically discarded when timer hits 00:00.</div>
+    <form id="metroForm" onsubmit="handleFormSubmit(event)">
+      <div class="section-title">Section 1: Candidate Bio-Data & Identifiers</div>
+      <div class="grid-3">
+        <div class="form-group"><label>Full Legal Name (Min 3 Words) *</label><input type="text" id="cand-name" placeholder="First Middle Last" required><div class="err-msg" id="err-name">Full 3 words likhna zaroori hai.</div></div>
+        <div class="form-group"><label>Official Email *</label><input type="email" id="email" placeholder="name@domain.com" required><div class="err-msg" id="err-email">Valid email likhein.</div></div>
+        <div class="form-group"><label>Roll Number (Format: MRC-2026-99999) *</label><input type="text" id="roll-no" placeholder="MRC-2026-12345" maxlength="15" required><div class="err-msg" id="err-roll">Format: MRC-2026-XXXXX</div></div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group"><label>Station Corridor Code (COR-XXX-99) *</label><input type="text" id="corridor-code" placeholder="COR-AGR-01" maxlength="10" required><div class="err-msg" id="err-corridor">Format: COR-AGR-01</div></div>
+        <div class="form-group"><label>Biometric Token (BIO-XXXX-999) *</label><input type="text" id="bio-token" placeholder="BIO-ABCD-123" maxlength="12" required><div class="err-msg" id="err-bio">Format: BIO-ABCD-123</div></div>
+        <div class="form-group"><label>Designated Post *</label><select id="applied-post" required><option value="">-- Choose Post --</option><option value="sc_to">Station Controller / Train Operator (SC/TO)</option><option value="je_elec">Junior Engineer (Electrical)</option><option value="je_signal">Junior Engineer (S&T / CBTC)</option><option value="maintainer">Maintainer (Rolling Stock / Track)</option></select><div class="err-msg" id="err-post">Post select karein.</div></div>
+      </div>
+      <div class="section-title">Section 2: Professional Technical Dossier</div>
+      <div class="grid-3">
+        <div class="form-group"><label>Technical Qualification *</label><select id="qualification" required><option value="">-- Qualification --</option><option value="btech">B.Tech / B.E. (Electrical / Electronics / Mech)</option><option value="diploma">Polytechnic Diploma (3 Years)</option><option value="iti">National Trade Certificate / ITI</option></select><div class="err-msg" id="err-qual">Qualification chunein.</div></div>
+        <div class="form-group"><label>Board Reg ID (REG-2024-XXXX) *</label><input type="text" id="reg-no" placeholder="REG-2024-ABCD" maxlength="13" required><div class="err-msg" id="err-reg">Format: REG-2024-ABCD</div></div>
+        <div class="form-group"><label>Medical Vision Category *</label><select id="med-cat" required><option value="">-- Medical Category --</option><option value="aye1">Aye-One (A-1) 6/6 without glasses</option><option value="aye2">Aye-Two (A-2) Field Staff</option><option value="aye3">Aye-Three (A-3) Workshop</option></select><div class="err-msg" id="err-med">Category select karein.</div></div>
+      </div>
+      <div class="section-title">Section 3: Operational Protocols & Security Cipher</div>
+      <div class="grid-2">
+        <div class="form-group"><label>Wheel Detection System *</label><select id="track-circuit" required><option value="">-- Select Protocol --</option><option value="axle">High-Availability Dual Sensor Axle Counters (SSDAC)</option><option value="aftc">Audio Frequency Jointless Track Circuit (AFTC)</option></select><div class="err-msg" id="err-tc">Protocol chunein.</div></div>
+        <div class="form-group"><label>Signaling Cipher (Type in REVERSE) *</label><div style="display:flex; gap:10px;"><div id="hash-box" style="background:#0a2540; color:#38bdf8; font-family:monospace; font-weight:bold; padding:8px 12px; border-radius:4px; letter-spacing:3px;">--------</div><input type="text" id="hash-input" placeholder="Reverse code" maxlength="8" required></div><div class="err-msg" id="err-hash">Reverse code galat hai.</div></div>
+      </div>
+      <div class="section-title">Section 4: Mandatory Typing Verification</div>
+      <div class="form-group">
+        <label>Verbatim Undertaking (Copy/Paste strictly blocked) *</label>
+        <div class="sample-box">I solemnly confirm that all submitted educational degrees, medical categories, and technical competencies strictly adhere to official metro recruitment mandates. I understand that train operation, signaling interlocks, and passenger traction power require zero negligence.</div>
+        <textarea id="typed-affidavit" rows="3" placeholder="Upar diya sentence exact word-to-word type karein..." required></textarea>
+        <div class="err-msg" id="err-affidavit">Statement exact match nahi hua! Spelling aur punctuation check karein.</div>
+      </div>
+      <div class="form-group">
+        <label>Operational Readiness Statement (Min 90 chars) *</label>
+        <textarea id="sop-statement" rows="2" placeholder="Explain your safety readiness..." required></textarea>
+        <div style="font-size:0.7rem; color:#64748b;">Characters: <span id="char-live" style="font-weight:bold; color:#0a2540;">0</span> / 90 min</div>
+        <div class="err-msg" id="err-sop">Kam se kam 90 characters likhein.</div>
+      </div>
+      <div class="checkbox-wrap"><input type="checkbox" id="c1" required><label for="c1">I declare that all entered particulars match original documents.</label></div>
+      <div class="checkbox-wrap"><input type="checkbox" id="c2" required><label for="c2">I acknowledge that submitting invalid data or proxy will cancel candidature.</label></div>
+      <div class="err-msg" id="err-checks">Dono checks mark karein.</div>
+      <button type="submit" class="btn-submit">SUBMIT & SEAL DOSSIER</button>
+    </form>
+  </div>
+  <div id="timeout-box" class="overlay">
+    <div style="font-size:3rem; margin-bottom:10px;">⏳</div>
+    <h2 style="color:var(--danger); margin-bottom:6px;">SESSION EXPIRED (180s)</h2>
+    <p style="color:#64748b; font-size:0.85rem; margin-bottom:15px;">3 minute ka samay samapt ho gaya. Form reset ho gaya hai.</p>
+    <button onclick="location.reload()" style="padding:10px 20px; background:#0a2540; color:#fff; border:none; border-radius:4px; font-weight:bold;">Restart Test</button>
+  </div>
+  <div id="success-box" class="overlay">
+    <div style="font-size:3rem; margin-bottom:10px;">🚆</div>
+    <h2 style="color:#15803d; margin-bottom:6px;">DOSSIER VERIFIED & SUBMITTED</h2>
+    <p style="color:#64748b; font-size:0.85rem;">Time limit ke andar form successfully sealed ho chuka hai.</p>
+  </div>
+</div>
+<script>
+  document.addEventListener('copy', (e) => e.preventDefault());
+  document.addEventListener('paste', (e) => { e.preventDefault(); alert('Copy/Paste blocked!'); });
+  let sLeft = 180;
+  const clock = document.getElementById('clock');
+  const timer = setInterval(() => {
+    sLeft--;
+    clock.textContent = `${String(Math.floor(sLeft/60)).padStart(2,'0')}:${String(sLeft%60).padStart(2,'0')}`;
+    if (sLeft <= 0) { clearInterval(timer); document.getElementById('form-body').style.display='none'; document.getElementById('timeout-box').style.display='block'; }
+  }, 1000);
+  function genHash(){ const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let r=""; for(let i=0;i<8;i++) r+=c.charAt(Math.floor(Math.random()*c.length)); return r; }
+  const currH = genHash(); document.getElementById('hash-box').textContent = currH;
+  const expRev = currH.split('').reverse().join('');
+  const sop = document.getElementById('sop-statement');
+  sop.addEventListener('input', () => { document.getElementById('char-live').textContent = sop.value.trim().length; });
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    let v = true;
+    document.querySelectorAll('.err-msg').forEach(el => el.style.display = 'none');
+    if (document.getElementById('cand-name').value.trim().split(/\s+/).length < 3) { document.getElementById('err-name').style.display = 'block'; v = false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(document.getElementById('email').value.trim())) { document.getElementById('err-email').style.display = 'block'; v = false; }
+    if (!/^MRC-2026-\d{5}$/.test(document.getElementById('roll-no').value.trim())) { document.getElementById('err-roll').style.display = 'block'; v = false; }
+    if (!/^COR-[A-Za-z]{3}-\d{2}$/.test(document.getElementById('corridor-code').value.trim())) { document.getElementById('err-corridor').style.display = 'block'; v = false; }
+    if (!/^BIO-[A-Za-z]{4}-\d{3}$/.test(document.getElementById('bio-token').value.trim())) { document.getElementById('err-bio').style.display = 'block'; v = false; }
+    if (!document.getElementById('applied-post').value) { document.getElementById('err-post').style.display = 'block'; v = false; }
+    if (!document.getElementById('qualification').value) { document.getElementById('err-qual').style.display = 'block'; v = false; }
+    if (!/^REG-\d{4}-[A-Za-z]{4}$/.test(document.getElementById('reg-no').value.trim())) { document.getElementById('err-reg').style.display = 'block'; v = false; }
+    if (!document.getElementById('med-cat').value) { document.getElementById('err-med').style.display = 'block'; v = false; }
+    if (!document.getElementById('track-circuit').value) { document.getElementById('err-tc').style.display = 'block'; v = false; }
+    if (document.getElementById('hash-input').value.trim().toUpperCase() !== expRev) { document.getElementById('err-hash').style.display = 'block'; v = false; }
+    const target = "I solemnly confirm that all submitted educational degrees, medical categories, and technical competencies strictly adhere to official metro recruitment mandates. I understand that train operation, signaling interlocks, and passenger traction power require zero negligence.";
+    if (document.getElementById('typed-affidavit').value.trim() !== target) { document.getElementById('err-affidavit').style.display = 'block'; v = false; }
+    if (sop.value.trim().length < 90) { document.getElementById('err-sop').style.display = 'block'; v = false; }
+    if (!document.getElementById('c1').checked || !document.getElementById('c2').checked) { document.getElementById('err-checks').style.display = 'block'; v = false; }
+    if (v) { clearInterval(timer); document.getElementById('form-body').style.display = 'none'; document.getElementById('success-box').style.display = 'block'; }
+  }
+</script>
+</body>
+</html>
